@@ -1,14 +1,16 @@
 # acoustic_pipeline
 
-This program runs several acoustic analysis programs and outputs a tab-separated file with summarized measures (mean, median, standard deviation, and inter-qualtile range (75th - 25th)) for all acoustic features. This program is checked in the Audiopipe1 server at LDC, and should work in Audiopipe1-deployed machines, but I haven't tested it yet. Version 1.0.1 includes 5 programs: Speech quality checking, in-house Speech Activity Detector, openSMILE (https://www.audeering.com/research/opensmile/), covarep (https://github.com/covarep/covarep), and Penn Phonetics forced aligner (https://asa.scitation.org/doi/10.1121/1.2935783). All programs can be optionally run except the speech quality checking, which will run even when the other programs were `False`. To run the program, download the program and enter a command like the following, for example:
+This pipeline runs several acoustic analysis programs and outputs a tab-separated file with summarized measures (mean, median, standard deviation, and inter-qualtile range (75th - 25th)) for all acoustic features. This pipeline is checked in the Audiopipe1 server at LDC, and should work in Audiopipe1-deployed machines, but I haven't tested it yet. Version 1.0.1 includes 5 programs: Speech quality checking, in-house Speech Activity Detector, openSMILE (https://www.audeering.com/research/opensmile/), covarep (https://github.com/covarep/covarep), and Penn Phonetics forced aligner (https://asa.scitation.org/doi/10.1121/1.2935783). All programs can be optionally run except the speech quality checking, which will run even when the other programs were `False`. To run the pipeline, download the program and enter a command like the following, for example:
 
 `python3 acoustic_pipeline_1.0.1/acoustic_pipeline.py -output_file output.tsv -input_folder /your_audio_folder -openSMILE True` 
 
 ## Prerequisites
-- openSMILE
-- covarep
-- Penn Phonetics forced aligner
+- openSMILE (https://www.audeering.com/research/opensmile/)
+- covarep (https://github.com/covarep/covarep)
+- Penn Phonetics forced aligner (https://web.sas.upenn.edu/phonetics-lab/facilities/)
 - Speech Activity Detector
+
+All of these programs will be installed in audiopipe1-deployed machines. If users are not using audiopipe1-deployed machines, please install all of the programs separately and replace the locations in the run_program.py script with new locations (see [Notes](#notes) below). 
 
 ## Arguments and options
 
@@ -40,7 +42,9 @@ For all audio files in the `input_folder`, the following steps will be performed
 
 2. Checking speech quality: I included SpeechQuality1.m on harris, after translating it to Python. This function always runs when the acoustic pipeline runs, and prints the signal-to-noise ratio (SNR) in the terminal (for quick checking). The SNR and the number of clipped frames from this function are also included in the output file.
 
-3. 
+3. Running programs: The programs that are `True` will run at this stage. The output files of the programs are saved in the `input_folder`. The output file of openSMILE is `.csv`, that of covarep is `.dat`, and that of SAD is `.lab`. Please note that SAD won't run if a corresponding transcript file is found. 
 
-## NOTE
+4. Summarizing measures
+
+## Notes
 
