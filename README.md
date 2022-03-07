@@ -10,7 +10,7 @@ This pipeline runs several acoustic analysis programs and outputs a tab-separate
 - Penn Phonetics forced aligner (https://web.sas.upenn.edu/phonetics-lab/facilities/)
 - Speech Activity Detector
 
-All of these programs will be installed in audiopipe1-deployed machines. If users are not using audiopipe1-deployed machines, please install all of the programs separately and replace the locations in the run_program.py script with new locations (see [Notes](#notes) below). 
+All of these programs will be installed in audiopipe1-deployed machines. If users are not using audiopipe1-deployed machines, please install all of the programs separately and replace the locations in the pipeline with new locations (see [Notes](#notes) below). 
 
 ## Arguments and options
 
@@ -20,7 +20,7 @@ All of these programs will be installed in audiopipe1-deployed machines. If user
 
 * `-trans_folder`: Optional (type: string). Enter the location of a folder with corresponding transcript files. If not specified, the program looks for transcript files in the `input_folder`. 
 
-* `-audio_type`: Optional (type: string). By specifying the audio type, only audio files in those formats will be processed. All audio types that are supported by Sox (http://sox.sourceforge.net/) are supported. If not specified, the default file type is `wav`. 
+* `-audio_type`: Optional (type: string). If specified, only audio files in the specified format will be processed. All audio types that are supported by Sox (http://sox.sourceforge.net/) are supported. If not specified, the default file type is `wav`. 
 
 * `-openSMILE`: Optional (type: boolean). If `True`, openSMILE will run and calculate low-level descriptor features of the configuration file selected. The location of openSMILE in Audiopipe1 is `/usr/local/src/opensmile`.
  
@@ -38,13 +38,29 @@ All of these programs will be installed in audiopipe1-deployed machines. If user
 
 For all audio files in the `input_folder`, the following steps will be performed.
 
-1. Audio preprocessing: The program first determines if the audio file is stereo or mono. If stereo, the program further decides if the two channels are identical (or similar enough to be considered as the same recordings). If identical, the two channels are merged. If not, two channels are separated into two mono audio files. During this process, all files are converted to wav files with a sampling rate of 16 KHz, 16 bits and saved in a temporary folder.
+1. Checking transcripts: The program checks if transcripts files are in the right format. Transcript files should not have headers and the column order should be filename, start, end, transcript, speaker, task. If the format of the transcript is different, it raises an error message and the program stops. Please revise the transcript format if you encounter this error message. This program does not change the transcript format.
 
-2. Checking speech quality: I included SpeechQuality1.m on harris, after translating it to Python. This function always runs when the acoustic pipeline runs, and prints the signal-to-noise ratio (SNR) in the terminal (for quick checking). The SNR and the number of clipped frames from this function are also included in the output file.
+2. Preprocessing audio files: The program first determines if the audio file is stereo or mono. If stereo, the program further decides if the two channels are identical (or similar enough to be considered as the same recordings). If identical, the two channels are merged. If not, two channels are separated into two mono audio files. During this process, all files are converted to wav files with a sampling rate of 16 KHz, 16 bits and saved in a temporary folder.
 
-3. Running programs: The programs that are `True` will run at this stage. The output files of the programs are saved in the `input_folder`. The output file of openSMILE is `.csv`, that of covarep is `.dat`, and that of SAD is `.lab`. Please note that SAD won't run if a corresponding transcript file is found. 
+3. Checking speech quality: I included SpeechQuality1.m on harris, after translating it to Python. This function always runs when the acoustic pipeline runs, and prints the signal-to-noise ratio (SNR) in the terminal (for quick checking). The SNR and the number of clipped frames from this function are also included in the output file.
 
-4. Summarizing measures
+4. Running programs: The programs that are `True` will run at this stage. The output files of the programs are saved in the `input_folder`. The output file of openSMILE is `.csv`, that of covarep is `.dat`, that of SAD is `.lab` (if SAD runs), and that of forced alignment is `.word` (word-level alignment) and `.align` (phone-level alignment). Please note that SAD won't run if a corresponding transcript file is found. 
+
+5. Summarizing measures: The program first calculate turn-level features even if `-turn_level` is `False` to identify who is talking in which channel. If one speaker has too many NaN values in Channel 1 when turn-level features were calculated, that speaker is considered to be speaking in Channel 2 and dropped from the summarized output dataframe of Channel 1. This function generally works okay but it is not perfect, so users will need to check the final output file carefully. After one audio file is processed, the output dataframe is added to the final output file.    
 
 ## Notes
+
+1. For now, `-forced_aligner True` only calculates word duration measures. I will include more features later. 
+
+2. Covarep crashes quite frequently when an audio file is too large. If the audio file is over 100 Mb, consider segmenting the file first before running it through the pipeline. 
+
+3. For users who are not using Audiopipe1-deployed machines: This program can be used in personal machines, etc. Please change these three lines in the `acousticsLib/run_programs.py` by replacing the location of each program with a new location:
+
+- `SAD_location = "/usr/local/src/ldc_sad_hmm-1.0.9/perform_sad.py"`
+- `openSMILE_default_config_location = "/usr/local/src/opensmile/config/is09-13/IS13_ComParE.conf"`
+- `acoustic_pipeline_location = './acoustic_pipeline_1.0.1'`
+
+
+
+
 
