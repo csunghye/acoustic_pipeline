@@ -52,7 +52,7 @@ For all audio files in the `input_folder`, the following steps will be performed
 
 1. For now, `-forced_aligner True` only calculates word duration measures. I will include more features later. 
 
-2. Covarep crashes quite frequently when an audio file is too large. If the audio file is over 100 Mb, consider segmenting the file first before running it through the pipeline. 
+2. MATLAB crashes quite frequently when running covarep if an audio file is too large. If the audio file is over 100 Mb, consider segmenting the file first before running it through the pipeline. 
 
 3. For users who are not using Audiopipe1-deployed machines: This program can be used in personal machines, etc. Please change these three lines in the `acousticsLib/run_programs.py` by replacing the location of each program with a new location:
 
@@ -60,7 +60,7 @@ For all audio files in the `input_folder`, the following steps will be performed
 - `openSMILE_default_config_location = "/usr/local/src/opensmile/config/is09-13/IS13_ComParE.conf"`
 - `acoustic_pipeline_location = './acoustic_pipeline_1.0.1'`
 
+4. Multithreading is not available now. I will implement this later.
 
-
-
+5. The speech quality checking function outputs a low SNR when a speaker on the channel does not speak much. I will debug this problem later. 
 
