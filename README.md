@@ -16,7 +16,7 @@ All of these programs will be installed in audiopipe1-deployed machines. If user
 
 * `-output_file`: This is an obligatory argument for the output file name. Note that the output file will be tab-separated. 
 
-* `-input_folder`: This is also an obligatory argument. Enter the location of a folder with audio files to be processed.
+* `-input_folder`: This is also an obligatory argument. Enter the full path of a folder with audio files to be processed. (If not a full path, MATLAB is likely to raise an error message.)
 
 * `-trans_folder`: Optional (type: string). Enter the location of a folder with corresponding transcript files. If not specified, the program looks for transcript files in the `input_folder`. 
 
@@ -30,7 +30,7 @@ All of these programs will be installed in audiopipe1-deployed machines. If user
 
 * `-covarep`: Optional (type: boolean). If `True`, the covarep program will run. MATLAB with valid license is required to run this program. I am planning to slowly migrate this program from MATLAB to Octave or Python, but this will take some time...  
 
-* `-forced_alignment`: Optional (type: boolean). If `True`, the Penn Phonetics forced aligner will run. This program is the only language-specific program out of all, and for now only the English forced aligner is included. 
+* `-forced_alignment`: Optional (type: boolean). If `True`, a revised version of the Penn Phonetics forced aligner will run. This program is the only language-specific program out of all, and for now only the English forced aligner is included. 
 
 *  `-turn_level`: Optional (type: boolean). If `True`, all acoustic measures will be summarized by turns (not by speaker). This option works with openSMILE and covarep. Duration measures will not be included in the final output file, even if `-SAD True`.
 
