@@ -29,7 +29,7 @@ def process_stereo(audio_file):
     tfm.set_output_format(file_type='wav', rate=16000, bits=16, channels=1, encoding='signed-integer')
 
     # if the two channels are different, split the channels and save them separately.
-    if result > 0.1: ## check out the threshold value (0.1) and modify it if necessary.
+    if result > 0.13: ## check out the threshold value (0.13) and modify it if necessary.
         # split channels' names will be audio_file +'_firstCH.wav' or '_secondCH.wav'
         filename = audio_file.split('.')[0]
         # save each channel separately
@@ -42,7 +42,7 @@ def process_stereo(audio_file):
         # The new file name will be audio_file+'_mono.wav'
         filename = audio_file.split('.')[0]
         # remix the channels into one
-        tfm.remix(remix_dictionary={1:[1], 2:[1]})
+        tfm.remix(remix_dictionary={1:[1,2]})
         tfm.build_file(input_array=array_out, output_filepath=filename+'_mono.wav', sample_rate_in=sp)
         # Return a value for further analysis
         return 'merged_stereo'
@@ -71,7 +71,7 @@ def process_mono(audio_file):
         return 'processed_mono'
 
 # combine stereo files for forced-alignment
-def combine_channel(audio_file):
+def combine_channel(audio_file, args):
     # check sampling rate and number of frames 
     sp = sox.file_info.sample_rate(input_filepath=audio_file)
     # initiate a sox transformer class
@@ -83,8 +83,9 @@ def combine_channel(audio_file):
     tfm.set_output_format(file_type='wav', rate=16000, bits=16, channels=1, encoding='signed-integer')
 
     # The new file name will be audio_file+'_mono.wav'
-    filename = audio_file.split('.')[0]
+    filename = audio_file.split('/')[-1].split('.')[0]
     # remix the channels into one
-    tfm.remix(remix_dictionary={1:[1], 2:[1]})
-    tfm.build_file(input_array=array_out, output_filepath=filename+'_mono.wav', sample_rate_in=sp)
+    tfm.remix(remix_dictionary={1:[1, 2]})
+    tfm.build_file(input_array=array_out, output_filepath=args.input_folder+'/temp/'+filename+'_mono.wav', sample_rate_in=sp)
+    
     
