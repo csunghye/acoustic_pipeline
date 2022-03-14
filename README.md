@@ -65,7 +65,7 @@ For all audio files in the `input_folder`, the following steps will be performed
 
 5. The speech quality checking function outputs a low SNR when a speaker on the channel does not speak much. I will debug this problem later. 
 
-6. F0 is calculated in both openSMILE and covarep. The f0 setting for pitch tracking in covarep is 80 Hz to 400 Hz. I didn't change the pitch tracking setting in openSMILE, so the default value will be used. In both programs, pitch values from voiced frames are calculated, so the values will be similar, but not identical. 
+6. F0 is calculated in both openSMILE (in semitone) and covarep (in Hz). The f0 setting for pitch tracking in covarep is 80 Hz to 400 Hz. I didn't change the pitch tracking setting in openSMILE, so the default value will be used. In both programs, pitch values from voiced frames are calculated, so the values will be similar, but not identical. 
 
 7. It is very important to note that transcripts need to be tab-separated files without headers and with the column order of \[filename, start, end, transcript, speaker, task\]. If transcripts are not in this format, please reformat transcripts before running the program.  
 
