@@ -69,6 +69,8 @@ def process_mono(audio_file):
 
         # Return a value for further analysis
         return 'processed_mono'
+    else:
+        return 'mono'
 
 # combine stereo files for forced-alignment
 def combine_channel(audio_file, args):
@@ -87,5 +89,4 @@ def combine_channel(audio_file, args):
     # remix the channels into one
     tfm.remix(remix_dictionary={1:[1, 2]})
     tfm.build_file(input_array=array_out, output_filepath=args.input_folder+'/temp/'+filename+'_mono.wav', sample_rate_in=sp)
-    
     
