@@ -69,3 +69,5 @@ For all audio files in the `input_folder`, the following steps will be performed
 
 7. It is very important to note that transcripts need to be tab-separated files without headers and with the column order of \[filename, start, end, transcript, speaker, task\]. If transcripts are not in this format, please reformat transcripts before running the program.  
 
+8. If an error occurs while running the forced aligner and users try to run it again, the pipeline won't automatically delete previously aligned files. It will just add lines to the existing files, which might result in duplicate lines in the output alignment files. To prevent this behavior, users will need to delete or move the previously aligned files.
+  
