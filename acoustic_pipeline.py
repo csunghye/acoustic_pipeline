@@ -93,7 +93,7 @@ def main(args):
                 SMILEdf = summarize_measures(args.input_folder+'/temp/'+os_outfile, transfile, turn_df, SMILEdf, args, openSMILE=True)    
                 # combine with temp output dataframe
                 temp = combine_data(temp, SMILEdf, args)
-            
+        
             ## run SAD
             if args.SAD:
                 count += 1
@@ -126,8 +126,7 @@ def main(args):
                 temp = combine_data(temp, covarep_df, args)
         
             # Add SNR and nclipped in the temp output dataframe
-            temp['SNR'] = snr
-            temp['nClipped'] = nclipped
+            temp = temp.append({'SNR': snr, 'nClipped': nclipped}, ignore_index=True)
             out_file = args.input_folder+'/'+outputname
             # write final results of the file being processed to the output file. 
             if os.path.exists(out_file):
