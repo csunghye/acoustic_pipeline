@@ -112,7 +112,7 @@ def main(args):
                 # combine result with temporary output dataframe
                 else:
                     if len(temp) !=0:
-                        temp = pd.merge(temp, SADdf, how='inner', on=['speaker', 'task'])
+                        temp = pd.merge(temp, SADdf, how='inner', on=['speaker', 'task', 'filename'])
                     else:
                         temp = SADdf    
             ## run covarep
