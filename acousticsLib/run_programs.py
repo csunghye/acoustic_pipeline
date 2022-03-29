@@ -9,7 +9,7 @@ from acousticsLib.transcript_prep import get_transcripts_only
 
 SAD_location = "/usr/local/src/ldc_sad_hmm-1.0.9/perform_sad.py"
 openSMILE_default_config_location = "/usr/local/src/opensmile/config/is09-13/IS13_ComParE.conf"
-acoustic_pipeline_location = "./acoustic_pipeline_1.0.1"
+acoustic_pipeline_location = "./acoustic_pipeline"
 forced_alignment_location = "/usr/local/aligner_v02/segment.py"
 
 # run SAD
