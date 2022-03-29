@@ -84,16 +84,30 @@ def main(args):
 
             ## run openSMILE
             if args.openSMILE:
-                run_openSMILE(args.input_folder+'/temp/'+newfile, args)
-                # copy the output file of openSMILE to the input folder
-                os_outfile = newfile.split('.')[0]+'.csv'
-                shutil.copy2(args.input_folder+'/temp/'+os_outfile, args.input_folder)
+                os_outfile = args.input_folder +'/'+ newfile.split('/')[-1].split('.')[0]+'.csv'
+                if not os.path.exists(os_outfile):
+                    run_openSMILE(args.input_folder+'/temp/'+newfile, args)
+                    # copy the output file of openSMILE to the input folder
+                    shutil.copy2(args.input_folder+'/temp/'+covarep_out.split('/')[-1], args.input_folder)
 
                 # summarize the output data and return a df
-                SMILEdf = summarize_measures(args.input_folder+'/temp/'+os_outfile, transfile, turn_df, SMILEdf, args, openSMILE=True)    
+                SMILEdf = summarize_measures(os_outfile, transfile, turn_df, SMILEdf, args, openSMILE=True)    
+                
                 # combine with temp output dataframe
                 temp = combine_data(temp, SMILEdf, args)
-        
+            
+            ## run covarep
+            if args.covarep:
+                covarep_out = args.input_folder+'/'+newfile.split('/')[-1].split('.')[0]+'.dat'
+                if not os.path.exists(covarep_out):
+                    run_covarep(args.input_folder+'/temp/'+newfile)
+                    # copy output file to the input_folder        
+                    shutil.copy2(args.input_folder+'/temp/'+covarep_out.split('/')[-1], args.input_folder)
+                
+                covarep_df = summarize_measures(covarep_out, transfile, turn_df, covarep_df, args, openSMILE=False)    
+                # combine with temp output dataframe
+                temp = combine_data(temp, covarep_df, args)        
+                
             ## run SAD
             if args.SAD:
                 count += 1
@@ -112,18 +126,10 @@ def main(args):
                 # combine result with temporary output dataframe
                 else:
                     if len(temp) !=0:
-                        temp = pd.merge(temp, SADdf, how='inner', on=['speaker', 'task', 'filename'])
+                        temp = pd.merge(temp, SADdf, how='inner', on=['speaker', 'task'])
                     else:
                         temp = SADdf    
-            ## run covarep
-            if args.covarep:
-                run_covarep(args.input_folder+'/temp/'+newfile)
-                # copy output file to the input_folder
-                covarep_out = args.input_folder+'/temp/'+newfile.split('/')[-1].split('.')[0]+'.dat'
-                shutil.copy2(covarep_out, args.input_folder)
-                covarep_df = summarize_measures(covarep_out, transfile, turn_df, covarep_df, args, openSMILE=False)    
-                # combine with temp output dataframe
-                temp = combine_data(temp, covarep_df, args)
+            
         
             # Add SNR and nclipped in the temp output dataframe
             temp = temp.append({'SNR': snr, 'nClipped': nclipped}, ignore_index=True)
