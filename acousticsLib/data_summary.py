@@ -123,8 +123,8 @@ def summarize_measures(file, transfile, turn_df, speaker_df, args, openSMILE=Fal
     # drop speakers who were not on the channel for stereo files
     include_speaker = []
     for key, grouped_df in interDf.groupby('speaker'):
-        # drop the speaker if the values in the first column contains NaN value 40% of the time.
-        if grouped_df.iloc[:, 1].isna().sum() > (0.3 * len(grouped_df)):
+        # drop the speaker if the values in the first column contains NaN value 50% of the time.
+        if grouped_df.iloc[:, 1].isna().sum() > (0.5 * len(grouped_df)):
             pass
         else:
             include_speaker.append(key)
@@ -159,10 +159,10 @@ def summarize_SAD(file, transfile, SADdf, args, count):
     # look up where the transcript file is.. 
     if args.trans_folder:
         list_of_trans = glob.glob(args.trans_folder+'/*.txt')
-        transfile = args.trans_folder+'/'+transfile
+        
     else:
         list_of_trans = glob.glob(args.input_folder+'/*.txt')
-        transfile = args.input_folder+'/'+transfile
+       
 
     if transfile in list_of_trans:
         # do not summarize measures repeatedly for stereo files
