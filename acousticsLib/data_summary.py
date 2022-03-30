@@ -197,7 +197,7 @@ def summarize_SAD(file, transfile, SADdf, args, count):
             temp['pause_rate'] = (temp.numPause / temp.total_dur ) *60
             temp['task_start'] = task_start[0]
             temp['task_end'] = task_end[0]
-            temp['filename'] = file.split('/')[-1]
+            #temp['filename'] = file.split('/')[-1]
             temp = temp.reset_index()
             
             # concat with the large data frame
