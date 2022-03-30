@@ -88,7 +88,7 @@ def main(args):
                 if not os.path.exists(os_outfile):
                     run_openSMILE(args.input_folder+'/temp/'+newfile, args)
                     # copy the output file of openSMILE to the input folder
-                    shutil.copy2(args.input_folder+'/temp/'+covarep_out.split('/')[-1], args.input_folder)
+                    shutil.copy2(args.input_folder+'/temp/'+os_outfile.split('/')[-1], args.input_folder)
 
                 # summarize the output data and return a df
                 SMILEdf = summarize_measures(os_outfile, transfile, turn_df, SMILEdf, args, openSMILE=True)    
